@@ -1,0 +1,14 @@
+# Base
+axis_base_linear_for: 5
+axis_base_linear_bac: 2
+axis_base_angular: 0
+scale_base_linear: 1.0
+scale_base_linear_turbo: 1.5
+scale_base_angular: 1.0
+# swtich torbo
+torbo_button: 1
+
+# Camera
+axis_camera_angular_yaw: 3
+axis_camera_angular_pitch: 4
+scale_camera_angular: 0.5

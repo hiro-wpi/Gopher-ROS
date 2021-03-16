@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+
+<robot name="main_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="load_main_camera" params="prefix camera_name main_camera_base
+                                                 fov:=69.4 width:=1920 height:=1080 
+                                                 update_rate:=60 wide_flag:=true">
+
+        <xacro:property name="mass" value="0.2" /> 
+        <xacro:property name="width_support" value="0.04" /> 
+        <xacro:property name="height_support" value="0.02" />
+        <xacro:property name="axel_offset" value="-0.25" /> 
+        
+        <link name="${prefix}support">
+            <collision>
+            <origin xyz="0 0 ${height_support/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${width_support} ${width_support} ${height_support}"/>
+            </geometry>
+            </collision>
+
+            <visual>
+            <origin xyz="0 0 ${height_support/2}" rpy="0 0 0"/>
+            <geometry>
+                <box size="${width_support} ${width_support} ${height_support}"/>
+            </geometry>
+            <material name="">
+                <color rgba="0.5 0.6 0.7 1"/>
+            </material>
+            </visual>
+
+            <inertial>
+            <origin xyz="0 0 ${height_support/2}" rpy="0 0 0"/>
+            <mass value="${mass}"/>
+            <inertia ixx="${mass / 12.0 * (width_support*width_support + height_support*height_support)}" ixy="0.0" ixz="0.0" 
+                    iyy="${mass / 12.0 * (height_support*height_support + width_support*width_support)}" iyz="0.0" 
+                    izz="${mass / 12.0 * (width_support*width_support + width_support*width_support)}"/>
+            </inertial>
+        </link>
+
+        <joint name="${prefix}support_joint" type="fixed">
+            <parent link="${main_camera_base}"/>
+            <child link="${prefix}support"/>
+            <origin xyz="${0.075-width_support/2} 0 0.8" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <link name="${prefix}yaw_link">
+            <collision>
+            <origin xyz="0 0 0.02" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.01" length="0.04"/>
+            </geometry>
+            </collision>
+
+            <visual>
+            <origin xyz="0 0 0.02" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.01" length="0.04"/>
+            </geometry>
+            <material name="blue">
+                <color rgba="0 0 1 1"/>
+            </material>
+            </visual>
+
+            <inertial>
+            <origin xyz="0 0 0.02" rpy="0 0 0"/>
+            <mass value="0.5"/>
+            <inertia ixx="7.9e-02" ixy="0.0" ixz="0.0" 
+                    iyy="7.9e-02" iyz="0.0" 
+                    izz="2.5e-02"/>
+            </inertial>
+        </link>
+
+        <joint name="${prefix}yaw_joint" type="revolute">
+            <parent link="${prefix}support"/>
+            <child link="${prefix}yaw_link"/>
+            <origin xyz="0 0 ${height_support}" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-1.047" upper="1.047" effort="20" velocity="1.0" />
+        </joint>
+
+        <link name="${prefix}pitch_link">
+            <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.01" length="0.04"/>
+            </geometry>
+            </collision>
+
+            <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="0.01" length="0.04"/>
+            </geometry>
+            <material name="red">
+                <color rgba="1 0 0 1"/>
+            </material>
+            </visual>
+
+            <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.5"/>
+            <inertia ixx="7.9e-02" ixy="0.0" ixz="0.0" 
+                    iyy="7.9e-02" iyz="0.0" 
+                    izz="2.5e-02"/>
+            </inertial>
+        </link>
+
+        <joint name="${prefix}pitch_joint" type="revolute">
+            <parent link="${prefix}yaw_link"/>
+            <child link="${prefix}pitch_link"/>
+            <origin xyz="0.02 0 0.02" rpy="1.57 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-1.047" upper="1.047" effort="20" velocity="1.0" />
+        </joint>
+
+        <transmission name="${prefix}yaw_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${prefix}yaw_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${prefix}yaw_actuator">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <transmission name="${prefix}pitch_trans">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="${prefix}pitch_joint">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="${prefix}pitch_actuator">
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+
+        <xacro:include filename="$(find gopher_description)/camera/urdf/_d435.urdf.xacro"/>
+        <xacro:sensor_d435 name="${camera_name}" prefix="${prefix}"
+                           parent="${prefix}pitch_link"
+                           fov="${fov}" width="${width}" height="${height}"
+                           update_rate="${update_rate}"  wide_flag="${wide_flag}">
+            <origin xyz="0.02 0.0 0.0" rpy="-1.57 0 0" /> 
+        </xacro:sensor_d435>
+
+    </xacro:macro>
+
+</robot>

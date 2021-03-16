@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+
+<robot name="gopher" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <!-- Arguments -->
+    <xacro:arg name="robot_name" default="gopher" />
+    <xacro:arg name="prefix" default="$(arg robot_name)/" />
+    <xacro:arg name="with_arms" default="true" />
+
+    <xacro:arg name="right_prefix" default="$(arg prefix)right_arm_" />
+    <xacro:arg name="left_prefix" default="$(arg prefix)left_arm_" />
+    <xacro:arg name="arm" default="gen3" />
+    <xacro:arg name="gripper" default="robotiq_2f_85" />
+    <xacro:arg name="dof" default="7" />
+    <xacro:arg name="vision" default="true" />
+    
+    <xacro:arg name="sim" default="true" />
+
+
+    <!-- Include files -->
+    <xacro:include filename="$(find gopher_description)/base/urdf/freight_macro.xacro" />
+    <xacro:include filename="$(find gopher_description)/base/urdf/torso.urdf.xacro" />
+    <xacro:include filename="$(find gopher_description)/arms/urdf/kortex_robot.xacro" />
+    <xacro:include filename="$(find gopher_description)/camera/urdf/main_camera_support.urdf.xacro" />
+    <xacro:include filename="$(find gopher_description)/camera/urdf/arm_camera.urdf.xacro" />
+
+
+    <!-- Load the base -->
+    <xacro:load_base prefix="$(arg prefix)"/>
+
+    <!-- Load torso -->
+    <xacro:load_torso prefix="$(arg prefix)"/> 
+
+    <!-- Load main camera -->
+    <xacro:load_main_camera prefix="$(arg prefix)main_cam_" camera_name="main_cam" 
+                            main_camera_base="$(arg prefix)torso"
+                            width="1080" height="720" update_rate="30" wide_flag="true"/>
+
+    <!-- Load two arms -->
+    <xacro:if value="$(arg with_arms)">
+        <!-- Load the right arm -->
+        <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
+                          vision="$(arg vision)" sim="$(arg sim)" 
+                          prefix="$(arg right_prefix)" parent="$(arg prefix)right_shoulder_link"/> 
+        <!-- Load arm camera -->
+        <xacro:load_arm_camera prefix="$(arg right_prefix)cam_" camera_name="right_arm_cam" 
+                               arm_camera_base="$(arg right_prefix)camera_link"
+                               width="1080" height="720" update_rate="30" wide_flag="true"/> 
+
+        <!-- Load the left arm -->
+        <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
+                          vision="$(arg vision)" sim="$(arg sim)" 
+                          prefix="$(arg left_prefix)" parent="$(arg prefix)left_shoulder_link"/> 
+        <!-- Load arm camera -->
+        <xacro:load_arm_camera prefix="$(arg left_prefix)cam_" camera_name="left_arm_cam" 
+                               arm_camera_base="$(arg left_prefix)camera_link"
+                               width="1080" height="720" update_rate="30" wide_flag="true"/> 
+    </xacro:if>
+
+
+    <!-- Load gazebo control pulgin ONLY ONCE -->
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <legacyModeNS>true</legacyModeNS>
+        </plugin>
+    </gazebo>
+
+</robot>

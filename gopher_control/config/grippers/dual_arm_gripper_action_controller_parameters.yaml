@@ -1,0 +1,25 @@
+right_arm_robotiq_2f_85_gripper_controller:
+    type: position_controllers/GripperActionController
+    joint: $(arg right_prefix)finger_joint
+    action_monitor_rate: 100
+
+left_arm_robotiq_2f_85_gripper_controller:
+    type: position_controllers/GripperActionController
+    joint: $(arg left_prefix)finger_joint
+    action_monitor_rate: 100
+
+gazebo_ros_control:
+  pid_gains:
+        $(arg right_prefix)finger_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg right_prefix)right_outer_knuckle_joint: {p: 10.0, i: 0.0, d: 0.00} 
+        $(arg right_prefix)right_inner_knuckle_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg right_prefix)left_inner_knuckle_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg right_prefix)left_inner_finger_joint: {p: 0.5, i: 0.0, d: 0.001} 
+        $(arg right_prefix)right_inner_finger_joint: {p: 0.5, i: 0.0, d: 0.001} 
+        
+        $(arg left_prefix)finger_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg left_prefix)right_outer_knuckle_joint: {p: 10.0, i: 0.0, d: 0.00} 
+        $(arg left_prefix)right_inner_knuckle_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg left_prefix)left_inner_knuckle_joint: {p: 10.0, i: 0.0, d: 0.01} 
+        $(arg left_prefix)left_inner_finger_joint: {p: 0.5, i: 0.0, d: 0.001} 
+        $(arg left_prefix)right_inner_finger_joint: {p: 0.5, i: 0.0, d: 0.001} 

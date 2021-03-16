@@ -1,0 +1,206 @@
+<launch>
+
+    <!-- Arguments -->
+    <!-- Robot name -->
+    <arg name="robot_name" default="gopher"/>
+    <arg name="prefix" default="$(arg robot_name)/"/>
+    
+    <!-- True if spawning the robot with two arms-->
+    <arg name="with_arms" default="true" />
+    <arg name="right_prefix" default="$(arg prefix)right_arm_" />
+    <arg name="left_prefix" default="$(arg prefix)left_arm_" />
+    <!-- Arm and gripper type -->
+    <arg name="arm" default="gen3"/>
+    <arg name="gripper" default="robotiq_2f_85" />
+    <!-- Number of degrees of freedom of the arm -->
+    <arg name="dof" default="7"/> 
+    <!-- True if the arm has a Vision module -->
+    <arg name="vision" default="true"/> 
+
+
+    <!-- Initial position in Gazebo -->
+    <arg name="x0" default="1"/>
+    <arg name="y0" default="-1"/>
+    <arg name="z0" default="0"/>
+    <arg name="yaw" default="1.57" />
+
+
+    <!-- Load the description for the robot -->
+    <param name="robot_description" command="$(find xacro)/xacro --inorder 
+        $(find gopher_description)/robots/urdf/gopher.xacro
+            robot_name:=$(arg robot_name) prefix:=$(arg prefix)
+            with_arms:=$(arg with_arms)
+            right_prefix:=$(arg right_prefix) 
+            left_prefix:=$(arg left_prefix)
+            arm:=$(arg arm) dof:=$(arg dof) 
+            vision:=$(arg vision) gripper:=$(arg gripper)
+            sim:=true"/>
+
+    <!-- Spawn the robot in Gazebo -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
+        output="screen" args="-urdf -param robot_description 
+            -model $(arg robot_name) 
+            -robot_namespace $(arg robot_name)
+            
+            -x $(arg x0) 
+            -y $(arg y0) 
+            -z $(arg z0) 
+            -Y $(arg yaw)
+
+            -J $(arg right_prefix)joint_1 -2.8
+            -J $(arg right_prefix)joint_2 1.57
+            -J $(arg right_prefix)joint_3 0.0
+            -J $(arg right_prefix)joint_4 1.15
+            -J $(arg right_prefix)joint_5 0.2
+            -J $(arg right_prefix)joint_6 1.95
+            -J $(arg right_prefix)joint_7 -3.05
+
+            -J $(arg left_prefix)joint_1 -2.2
+            -J $(arg left_prefix)joint_2 1.57
+            -J $(arg left_prefix)joint_3 1.57
+            -J $(arg left_prefix)joint_4 1.57
+            -J $(arg left_prefix)joint_5 0
+            -J $(arg left_prefix)joint_6 0
+            -J $(arg left_prefix)joint_7 1.57"
+        if="$(eval arg('with_arms'))"/>
+    
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" 
+        output="screen" args="-urdf -param robot_description 
+            -model $(arg robot_name) 
+            -robot_namespace $(arg robot_name)
+
+            -x $(arg x0) 
+            -y $(arg y0) 
+            -z $(arg z0) 
+            -Y $(arg yaw)"
+        unless="$(eval arg('with_arms'))"/>
+
+
+    <!-- Load controller configuration files from gopher_control package -->
+    <!-- Mobile base controller -->
+    <rosparam file="$(find gopher_control)/config/base/mobile_base_controller.yaml" 
+        subst_value="true" command="load" />
+    <!-- Joint state controller -->
+    <rosparam file="$(find gopher_control)/config/base/joint_state_controller.yaml" 
+        subst_value="true" command="load" />
+    <!-- Camera controller -->
+    <rosparam file="$(find gopher_control)/config/camera/main_camera_controller.yaml" 
+        subst_value="true" command="load" />
+    <!-- Joint controller -->
+    <rosparam file="$(find gopher_control)/config/arms/dual_arm_joint_position_controllers.yaml"
+        subst_value="true" command="load" if="$(eval arg('with_arms'))"/>
+    <!-- Gripper controller -->
+    <rosparam file="$(find gopher_control)/config/grippers/dual_arm_gripper_action_controller_parameters.yaml"
+        subst_value="true" command="load" if="$(eval arg('with_arms'))"/>
+
+
+    <!-- Start base and camera controllers -->
+    <node name="basic_controllers_spawner" pkg="controller_manager" type="spawner" 
+        respawn="false" output="screen" args="
+            joint_state_controller 
+            base_controller
+            main_cam_pitch_controller
+            main_cam_yaw_controller"/>
+
+    <!-- Start the arm trajectory controllers -->
+    <node name="$(arg arm)_trajectory_controller_spawner" pkg="controller_manager" type="spawner" 
+        respawn="false" output="screen" args=" 
+            left_arm_$(arg arm)_joint_trajectory_controller
+            right_arm_$(arg arm)_joint_trajectory_controller" 
+        if="$(eval arg('with_arms'))"/>
+
+    <!-- Start the arm position controllers -->
+    <node name="$(arg arm)_position_controllers_spawner" pkg="controller_manager" type="spawner" 
+        respawn="false" output="screen" args=" --stopped
+            right_arm_joint_1_position_controller
+            right_arm_joint_2_position_controller
+            right_arm_joint_3_position_controller
+            right_arm_joint_4_position_controller
+            right_arm_joint_5_position_controller
+            right_arm_joint_6_position_controller
+            right_arm_joint_7_position_controller
+            
+            left_arm_joint_1_position_controller
+            left_arm_joint_2_position_controller
+            left_arm_joint_3_position_controller
+            left_arm_joint_4_position_controller
+            left_arm_joint_5_position_controller
+            left_arm_joint_6_position_controller
+            left_arm_joint_7_position_controller"
+        if="$(eval arg('with_arms'))"/>
+
+    <!-- Start gripper controllers -->
+    <node name="$(arg gripper)_controllers_spawner" pkg="controller_manager" type="spawner" 
+        respawn="false" output="screen" args="
+            right_arm_$(arg gripper)_gripper_controller
+            left_arm_$(arg gripper)_gripper_controller"
+        if="$(eval arg('with_arms'))"/>
+
+    
+    <!-- Control Interface -->
+    <!-- Start camera control interface -->
+    <node name="main_camera_interface" pkg="gopher_control" type="main_camera_control_interface"
+          respawn="false" output="screen">
+    </node>
+
+    <!-- Start MoveIt main executable -->
+    <include file="$(find gopher_moveit_config)/launch/move_group.launch"
+        if="$(eval arg('with_arms'))">
+        <arg name="publish_monitored_planning_scene" value="true" />
+        <arg name="prefix" value="$(arg prefix)"/>
+        <arg name="right_prefix" value="$(arg right_prefix)" />
+        <arg name="left_prefix" value="$(arg left_prefix)"/>
+    </include> 
+
+    <!-- Start MoveIt interface and home the robot -->
+    <node name="move_group_interface" pkg="gopher_control" type="move_group_interface.py" 
+          output="screen" respawn="false"
+          if="$(eval arg('with_arms'))">
+    </node>
+    
+    <!-- TODO Driver is not yet implemented-->
+    <!-- Parameters for physical robot -->
+    <arg name="cyclic_data_publish_rate" default="30"/> <!--Hz-->
+    <?ignore
+    <!-- Start simulated Kortex Driver -->
+    <!--launch-prefix="gdb -ex run args"-->
+    <node name="right_arm_driver" pkg="kortex_driver" type="kortex_arm_driver" output="screen"
+        if="$(eval arg('with_arms'))">
+        <param name="sim" value="true"/>
+        <param name="cyclic_data_publish_rate" value="$(arg cyclic_data_publish_rate)"/>
+        <param name="arm" value="$(arg arm)"/>
+        <param name="gripper" value="$(arg gripper)"/>
+        <param name="dof" value="$(arg dof)"/>
+        <param name="robot_name" value="$(arg robot_name)"/>
+        <param name="prefix" value="$(arg right_prefix)"/>
+        <rosparam command="load" file="$(find gopher_description)/arms/config/right_joint_limits.yaml" subst_value="true"/>
+        <rosparam command="load" file="$(find gopher_description)/arms/config/right_twist_limits.yaml" subst_value="true"/>
+        <rosparam command="load" file="$(find gopher_description)/grippers/config/right_joint_limits.yaml" subst_value="true"/>
+    </node>
+    <node name="left_arm_driver" pkg="kortex_driver" type="kortex_arm_driver" output="screen"
+        if="$(eval arg('with_arms'))">
+        <param name="sim" value="true"/>
+        <param name="cyclic_data_publish_rate" value="$(arg cyclic_data_publish_rate)"/>
+        <param name="arm" value="$(arg arm)"/>
+        <param name="gripper" value="$(arg gripper)"/>
+        <param name="dof" value="$(arg dof)"/>
+        <param name="robot_name" value="$(arg robot_name)"/>
+        <param name="prefix" value="left_arm_"/>
+        <rosparam command="load" file="$(find gopher_description)/arms/config/left_joint_limits.yaml" subst_value="true"/>
+        <rosparam command="load" file="$(find gopher_description)/arms/config/left_twist_limits.yaml" subst_value="true"/>
+        <rosparam command="load" file="$(find gopher_description)/grippers/config/left_joint_limits.yaml" subst_value="true"/>
+    </node>
+    ?>
+
+
+    <!-- Start robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+        respawn="false" output="screen"/>
+
+
+    <!-- Navigation package -->
+    <include file="$(find gopher_navigation)/launch/gopher_amcl.launch">
+        <arg name="prefix" value="$(arg prefix)"/>
+    </include>
+
+</launch>

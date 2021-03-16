@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+
+<robot name="main_camera" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="load_arm_camera" params="prefix camera_name arm_camera_base
+                                                fov:=69.4 width:=1920 height:=1080 
+                                                update_rate:=60 wide_flag:=true">
+        
+        <link name="${prefix}support">
+            <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.001 0.001 0.001"/>
+            </geometry>
+            </collision>
+
+            <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.001 0.001 0.001"/>
+            </geometry>
+            </visual>
+
+            <inertial>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.0"/>
+            <inertia ixx="0.01" ixy="0.01" ixz="0.01" 
+                     iyy="0.01" iyz="0.01" 
+                     izz="0.01"/>
+            </inertial>
+        </link>
+
+        <joint name="${prefix}support_joint" type="fixed">
+            <parent link="${arm_camera_base}"/>
+            <child link="${prefix}support"/>
+            <origin xyz="0 0 0" rpy="0 -1.57 1.57"/>
+            <axis xyz="0 0 1"/>
+        </joint>
+
+        <xacro:include filename="$(find gopher_description)/camera/urdf/_d435.urdf.xacro"/>
+        <xacro:sensor_d435 name="${camera_name}" prefix="${prefix}"
+                           parent="${prefix}support"
+                           fov="${fov}" width="${width}" height="${height}"
+                           update_rate="${update_rate}" wide_flag="${wide_flag}">
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0" /> 
+        </xacro:sensor_d435>
+
+    </xacro:macro>
+
+</robot>
