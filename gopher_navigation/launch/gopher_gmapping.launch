@@ -1,7 +1,7 @@
 <launch>
 
   <arg name="prefix" default="gopher/"/>
-  <arg name="scan" default="base_scan"/>
+  <arg name="scan" default="$(arg prefix)base_scan"/>
   <arg name="base_frame" default="$(arg prefix)base_link"/>
   <arg name="odom_frame" default="$(arg prefix)odom"/>
 
