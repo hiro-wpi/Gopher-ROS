@@ -13,7 +13,6 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   sensor_msgs
   std_msgs
-  ros_falcon
 )
 
 ## System dependencies are found with CMake's conventions
@@ -137,10 +136,6 @@ add_library(${PROJECT_NAME}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/gopher_control_node.cpp)
-
-add_executable(falcon_interface src/falcon_interface.cpp)
-target_link_libraries(falcon_interface ${catkin_LIBRARIES})
-add_dependencies(falcon_interface ${catkin_EXPORTED_TARGETS})
 
 add_executable(main_camera_control_interface src/main_camera_control_interface.cpp)
 target_link_libraries(main_camera_control_interface ${catkin_LIBRARIES})
