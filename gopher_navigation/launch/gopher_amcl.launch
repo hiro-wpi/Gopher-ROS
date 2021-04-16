@@ -1,6 +1,6 @@
 <launch>
-
-  <arg name="prefix" default="gopher/"/>
+  <arg name="robot_name" default="gopher"/>
+  <arg name="prefix" default="$(arg robot_name)/"/>
   <arg name="odom_frame" default="$(arg prefix)odom"/>
   <arg name="scan" default="base_scan"/>
   <arg name="base_frame" default="$(arg prefix)base_link"/>

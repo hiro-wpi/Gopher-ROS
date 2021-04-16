@@ -200,7 +200,7 @@
 
     <!-- Navigation package -->
     <include file="$(find gopher_navigation)/launch/gopher_amcl.launch">
-        <arg name="prefix" value="$(arg prefix)"/>
+        <arg name="robot_name" value="$(arg robot_name)"/>
     </include>
 
 </launch>
