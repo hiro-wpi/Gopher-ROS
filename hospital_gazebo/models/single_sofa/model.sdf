@@ -18,11 +18,10 @@
       </inertial>
 
       <collision name="collision">
-        <pose>0 0.07 0.39 0 0 0</pose>
         <geometry>
-          <box> 
-            <size>0.93 0.738 0.78</size>
-          </box>
+          <mesh>
+            <uri>model://single_sofa/single_sofa_collision.dae</uri>
+          </mesh>
         </geometry>
       </collision>
 
