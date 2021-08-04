@@ -13,14 +13,14 @@
             <collision>
                 <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
                 <geometry>
-                    <box size="${width} ${width} ${height}"/>
+                    <mesh filename="package://gopher_description/torso_description/meshes/torso.dae" />
                 </geometry>
             </collision>
 
             <visual>
                 <origin xyz="0 0 ${height/2}" rpy="0 0 0"/>
                 <geometry>
-                    <box size="${width} ${width} ${height}"/>
+                    <mesh filename="package://gopher_description/torso_description/meshes/torso.dae" />
                 </geometry>
                 <material name="">
                     <color rgba="0.5 0.6 0.7 1"/>
