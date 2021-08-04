@@ -20,7 +20,7 @@
     <!-- Include files -->
     <xacro:include filename="$(find gopher_description)/fetch_description/urdf/freight_macro.xacro" />
     <xacro:include filename="$(find gopher_description)/torso_description/urdf/torso.urdf.xacro" />
-    <xacro:include filename="$(find gopher_description)/arms/urdf/kortex_robot.xacro" />
+    <xacro:include filename="$(find gopher_description)/kortex_description/arms/urdf/kortex_robot.xacro" />
     <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/main_camera_support.urdf.xacro" />
     <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/arm_camera.urdf.xacro" />
 
