@@ -9,12 +9,8 @@ aluminum peripherial evaluation case.
 -->
 
 <robot name="sensor_d435" xmlns:xacro="http://ros.org/wiki/xacro">
-  <!--File includes-->
-  <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/_d435.gazebo.xacro"/>
+  <xacro:macro name="sensor_d435" params="prefix parent *origin">
 
-  <xacro:macro name="sensor_d435" params="name:=camera prefix:=camera/ parent 
-                                          fov:=69.4 width:=1920 height:=1080 
-                                          update_rate:=60 wide_flag:=false *origin">
     <xacro:property name="M_PI" value="3.1415926535897931" />
   
     <!-- The following values are approximate, and the camera node
@@ -37,10 +33,9 @@ aluminum peripherial evaluation case.
     <xacro:property name="d435_cam_depth_py" value="0.0175"/>
     <xacro:property name="d435_cam_depth_pz" value="${d435_cam_height/2}"/>
 
-    <material name="${prefix}aluminum">
-	  <color rgba="0.5 0.5 0.5 1"/>
+    <material name="aluminum">
+	    <color rgba="0.5 0.5 0.5 1"/>
     </material>
-
 
     <!-- camera body, with origin at bottom screw mount -->
     <joint name="${prefix}joint" type="fixed">
@@ -60,16 +55,14 @@ aluminum peripherial evaluation case.
       <visual>
       <origin xyz="${d435_cam_mount_from_center_offset} ${-d435_cam_depth_py} 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
         <geometry>
-          <!-- <box size="${d435_cam_width} ${d435_cam_height} ${d435_cam_depth}"/> -->
           <mesh filename="package://gopher_description/realsense2_description/meshes/d435.dae" />
-          <!--<mesh filename="package://realsense2_description/meshes/d435/d435.dae" />-->
         </geometry>
-        <material name="${prefix}aluminum"/>
+        <material name="aluminum"/>
       </visual>
       <collision>
         <origin xyz="0 ${-d435_cam_depth_py} 0" rpy="0 0 0"/>
         <geometry>
-        <box size="${d435_cam_depth} ${d435_cam_width} ${d435_cam_height}"/>
+          <box size="${d435_cam_depth} ${d435_cam_width} ${d435_cam_height}"/>
         </geometry>
       </collision>
       <inertial>
@@ -141,21 +134,6 @@ aluminum peripherial evaluation case.
       <child link="${prefix}color_optical_frame" />
     </joint>
     <link name="${prefix}color_optical_frame"/>
-
-    <!-- Realsense Gazebo Plugin -->
-    <!-- Normal camera -->
-    <xacro:gazebo_d435 camera_name="${name}" reference_link="${prefix}link" 
-                      color_optical_frame="${name}_color_optical_frame" 
-                      fov="${fov}" width="${width}" height="${height}"
-                      update_rate="${update_rate}"/>
-    
-    <!-- Wide camera -->
-    <xacro:if value="${wide_flag}">
-    <xacro:gazebo_d435 camera_name="${name}_wide" reference_link="${prefix}link" 
-                      color_optical_frame="${name}_color_optical_frame" 
-                      fov="114" width="${1.5555*width}" height="${height}"
-                      update_rate="${update_rate}"/>
-    </xacro:if>
 
   </xacro:macro>
 </robot>

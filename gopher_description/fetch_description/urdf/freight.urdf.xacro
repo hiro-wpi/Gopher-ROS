@@ -1,16 +1,8 @@
 <?xml version="1.0"?>
-
 <robot name="freight" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  
-  <xacro:macro name="load_base_urdf" params="prefix">
+  <xacro:macro name="load_freight_urdf" params="prefix">
 
-    <link name="${prefix}base_link"></link>
-
-    <joint name="${prefix}base_link_joint" type="fixed">
-        <origin xyz="0 0 0" rpy="0 0 0" />
-        <parent link="${prefix}base_link"/>
-        <child link="${prefix}chassis_link" />
-    </joint>
+    <link name="${prefix}base_link"/>
 
     <link name="${prefix}chassis_link">
       <inertial>
@@ -23,9 +15,6 @@
         <geometry>
           <mesh filename="package://gopher_description/fetch_description/meshes/base_link.dae" />
         </geometry>
-        <material name="">
-          <color rgba="0.356 0.361 0.376 1" />
-        </material>
       </visual>
       <collision>
         <origin rpy="0 0 0" xyz="0 0 0" />
@@ -34,6 +23,11 @@
         </geometry>
       </collision>
     </link>
+
+    <joint name="${prefix}base_joint" type="fixed">
+      <parent link="${prefix}base_link"/>
+      <child link="${prefix}chassis_link"/>
+    </joint>
 
     <link name="${prefix}r_wheel_link">
       <inertial>
@@ -59,8 +53,7 @@
     </link>
 
     <joint name="${prefix}r_wheel_joint" type="continuous">
-      <!--origin rpy="-6.123E-17 0 0" xyz="0.0012914 -0.18738 0.055325" -->
-      <origin rpy="-6.123E-17 0 0" xyz="0.0012914 -0.18738 0.0602" /> 
+      <origin rpy="-6.123E-17 0 0" xyz="0.0012914 -0.18738 0.0602" /> <!-- r 0.0605 -->
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}r_wheel_link" />
       <axis xyz="0 1 0" />
@@ -91,8 +84,7 @@
     </link>
 
     <joint name="${prefix}l_wheel_joint" type="continuous">
-      <!-- origin rpy="-6.123E-17 0 0" xyz="0.0012914 0.18738 0.055325" -->
-      <origin rpy="-6.123E-17 0 0" xyz="0.0012914 0.18738 0.0602" />
+      <origin rpy="-6.123E-17 0 0" xyz="0.0012914 0.18738 0.0602" /> <!-- r 0.0605 -->
       <parent link="${prefix}chassis_link" />
       <child link="${prefix}l_wheel_link" />
       <axis xyz="0 1 0" />
@@ -167,34 +159,11 @@
     </joint>
 
     <link name="${prefix}base_camera_optical_frame" />
-
     <joint name="${prefix}base_camera_optical_joint" type="fixed">
       <origin rpy="1.5707963267966 0 1.5707963267966" xyz="0 0 0" />
       <parent link="${prefix}base_camera_link" />
       <child link="${prefix}base_camera_optical_frame" />
     </joint>
 
-
-    <transmission name="${prefix}r_wheel_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}r_wheel_joint">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}r_wheel_actuator">
-          <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
-    <transmission name="${prefix}l_wheel_trans">
-      <type>transmission_interface/SimpleTransmission</type>
-      <joint name="${prefix}l_wheel_joint">
-          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
-      </joint>
-      <actuator name="${prefix}l_wheel_actuator">
-          <mechanicalReduction>1</mechanicalReduction>
-      </actuator>
-    </transmission>
-
   </xacro:macro>
-
 </robot>

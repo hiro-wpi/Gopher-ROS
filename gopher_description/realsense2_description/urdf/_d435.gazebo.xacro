@@ -7,13 +7,11 @@ using libgazebo_ros_openni_kinect plugin
   
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
   
-  <xacro:macro name="gazebo_d435" params="camera_name reference_link
-                                          color_optical_frame 
-                                          fov:=69.4 width:=1920 height:=1080
-                                          update_rate:=30" >
+  <xacro:macro name="gazebo_d435" params="camera_name reference_link frame_name
+                                          fov:=69.4 width:=1920 height:=1080 update_rate:=30" >                                                  
 
-    <!-- Load parameters to model's main link-->
     <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+
     <gazebo reference="${reference_link}">
       <sensor type="depth" name="${camera_name}">
         <always_on>1</always_on>
@@ -31,24 +29,24 @@ using libgazebo_ros_openni_kinect plugin
             <far>20</far>
           </clip>
         </camera>
-        <plugin name="${camera_name}_controller" filename="libgazebo_ros_openni_kinect.so">
+        <plugin name="${camera_name}_plugin" filename="libgazebo_ros_openni_kinect.so">
           <baseline>0.2</baseline>
           <alwaysOn>true</alwaysOn>
           <updateRate>0.0</updateRate>
-          <cameraName>${camera_name}</cameraName>
-          <frameName>${color_optical_frame}</frameName>                   
+          <cameraName>${camera_name}</cameraName>     
           <imageTopicName>color/image_raw</imageTopicName>
+          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>
           <depthImageTopicName>depth/image_raw</depthImageTopicName>
+          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>
           <pointCloudTopicName>depth/points</pointCloudTopicName>
-          <cameraInfoTopicName>color/camera_info</cameraInfoTopicName>              
-          <depthImageCameraInfoTopicName>depth/camera_info</depthImageCameraInfoTopicName>            
+          <frameName>${frame_name}</frameName>
           <pointCloudCutoff>0.5</pointCloudCutoff>
           <pointCloudCutoffMax>3.0</pointCloudCutoffMax>
-          <distortionK1>0</distortionK1>
-          <distortionK2>0</distortionK2>
-          <distortionK3>0</distortionK3>
-          <distortionT1>0</distortionT1>
-          <distortionT2>0</distortionT2>
+          <distortionK1>0.00000001</distortionK1>
+          <distortionK2>0.00000001</distortionK2>
+          <distortionK3>0.00000001</distortionK3>
+          <distortionT1>0.00000001</distortionT1>
+          <distortionT2>0.00000001</distortionT2>
           <CxPrime>0</CxPrime>
           <Cx>0</Cx>
           <Cy>0</Cy>

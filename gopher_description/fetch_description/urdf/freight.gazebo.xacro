@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
-
 <robot name="freight" xmlns:xacro="http://www.ros.org/wiki/xacro">
-  
-  <xacro:macro name="load_base" params="prefix">
-
-      <!-- <xacro:include filename="$(find fetch_description)/robots/freight.urdf.xacro" /> -->
-      <xacro:include filename="$(find gopher_description)/fetch_description/urdf/freight.urdf.xacro" />
-      <xacro:load_base_urdf prefix="${prefix}"/>
+  <xacro:macro name="load_freight_gazebo" params="prefix">
 
       <!-- Base is modeled as a big tub sitting on floor, with two wheels -->
       <gazebo reference="${prefix}chassis_link">
@@ -29,18 +23,11 @@
         <mu2>0.8</mu2>
         <material>Gazebo/Black</material>
       </gazebo>
-      <!-- Color the estop -->
-      <gazebo reference="${prefix}estop_link">
-        <material>Gazebo/Red</material>
-      </gazebo>
       <gazebo reference="${prefix}l_wheel_joint">
         <implicitSpringDamper>1</implicitSpringDamper>
       </gazebo>
       <gazebo reference="${prefix}r_wheel_joint">
         <implicitSpringDamper>1</implicitSpringDamper>
-      </gazebo>
-      <gazebo reference="${prefix}camera_support">
-        <material>Gazebo/Black</material>
       </gazebo>
 
       <!-- SICK TIM561 (25m Range) -->
@@ -77,7 +64,32 @@
           </plugin>
         </sensor>
       </gazebo>
-  
-  </xacro:macro>
 
+      <!-- Color the estop -->
+      <gazebo reference="${prefix}estop_link">
+        <material>Gazebo/Red</material>
+      </gazebo>
+
+      <!-- Transmission -->
+      <transmission name="${prefix}r_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}r_wheel_joint">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}r_wheel_actuator">
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+    <transmission name="${prefix}l_wheel_trans">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${prefix}l_wheel_joint">
+          <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="${prefix}l_wheel_actuator">
+          <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+
+  </xacro:macro>
 </robot>
