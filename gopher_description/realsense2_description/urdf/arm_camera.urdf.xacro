@@ -37,7 +37,7 @@
             <axis xyz="0 0 1"/>
         </joint>
 
-        <xacro:include filename="$(find gopher_description)/camera/urdf/_d435.urdf.xacro"/>
+        <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/_d435.urdf.xacro"/>
         <xacro:sensor_d435 name="${camera_name}" prefix="${prefix}"
                            parent="${prefix}support"
                            fov="${fov}" width="${width}" height="${height}"

@@ -135,7 +135,7 @@
             </actuator>
         </transmission>
 
-        <xacro:include filename="$(find gopher_description)/camera/urdf/_d435.urdf.xacro"/>
+        <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/_d435.urdf.xacro"/>
         <xacro:sensor_d435 name="${camera_name}" prefix="${prefix}"
                            parent="${prefix}pitch_link"
                            fov="${fov}" width="${width}" height="${height}"
