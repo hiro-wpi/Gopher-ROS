@@ -32,8 +32,7 @@ def main():
         # lidar
         "base_scan": 
             RosPublisher("base_scan", LaserScan, queue_size=1),
-        
-        # State
+        # state
         "joint_states": 
             RosPublisher("joint_states", JointState, queue_size=1),
         
