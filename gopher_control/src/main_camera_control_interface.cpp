@@ -6,8 +6,6 @@
 #include "geometry_msgs/Twist.h"
 #include "std_msgs/Float64.h"
 #include "std_msgs/Float64MultiArray.h"
-#include "trajectory_msgs/JointTrajectory.h"
-#include "trajectory_msgs/JointTrajectoryPoint.h"
 #include "geometry_msgs/Pose.h"
 
 class SubscribeAndPublish {
@@ -24,7 +22,6 @@ public:
         twist_sub_ = n_.subscribe("main_cam_controller/pitch_yaw", 10, &SubscribeAndPublish::process_camera_control, this);
         yaw_pub_ = n_.advertise<std_msgs::Float64>("main_cam_yaw_controller/command", 1);
         pitch_pub_ = n_.advertise<std_msgs::Float64>("main_cam_pitch_controller/command", 1);
-        third_cam_pub_ = n_.advertise<trajectory_msgs::JointTrajectory>("right_arm_gen3_joint_trajectory_controller/command", 1);
     }
     ~SubscribeAndPublish() {}
 
@@ -44,47 +41,7 @@ public:
 
         yaw_pub_.publish(yaw_command);
         pitch_pub_.publish(pitch_command);
-
-        // Form trajectory controller command
-        trajectory_msgs::JointTrajectory joint_goal;
-        joint_goal.joint_names.resize(7);
-        joint_goal.joint_names[0] = ("gopher_1/right_arm_joint_1"); 
-        joint_goal.joint_names[1] = ("gopher_1/right_arm_joint_2"); 
-        joint_goal.joint_names[2] = ("gopher_1/right_arm_joint_3"); 
-        joint_goal.joint_names[3] = ("gopher_1/right_arm_joint_4"); 
-        joint_goal.joint_names[4] = ("gopher_1/right_arm_joint_5"); 
-        joint_goal.joint_names[5] = ("gopher_1/right_arm_joint_6"); 
-        joint_goal.joint_names[6] = ("gopher_1/right_arm_joint_7"); 
-
-        joint_goal.points.resize(1);
-        trajectory_msgs::JointTrajectoryPoint joint_goal_points;
-        joint_goal_points.positions.push_back(-2.7); 
-        joint_goal_points.positions.push_back(1.5);
-        joint_goal_points.positions.push_back(0.0);
-        joint_goal_points.positions.push_back(1.43);
-        joint_goal_points.positions.push_back(0.07 + pitch_command.data);
-        joint_goal_points.positions.push_back(1.71 - yaw_command.data);
-        joint_goal_points.positions.push_back(3.14);
-        joint_goal.points[0] = joint_goal_points;
-        joint_goal.points[0].time_from_start = ros::Duration(0.1);
-
-        joint_goal.header.stamp = ros::Time::now();
-        joint_goal.header.frame_id = "base_link";
-        third_cam_pub_.publish(joint_goal);
-
-        /*
-        std_msgs::Float64MultiArray joint_goal;
-        joint_goal.data.push_back(-2.8 + yaw_command.data);
-        joint_goal.data.push_back(1.5);
-        joint_goal.data.push_back(0.0);
-        joint_goal.data.push_back(1.43);
-        joint_goal.data.push_back(0.07);
-        joint_goal.data.push_back(1.71 + pitch_command.data);
-        joint_goal.data.push_back(3.14);
-        third_cam_pub_.publish(joint_goal);
-        */
     }
-
 };
 
 
