@@ -19,7 +19,10 @@
 
     <!-- Include files -->
     <xacro:include filename="$(find gopher_description)/fetch_description/urdf/freight_macro.xacro" />
+
     <xacro:include filename="$(find gopher_description)/torso_description/urdf/torso.urdf.xacro" />
+    <xacro:include filename="$(find gopher_description)/torso_description/urdf/torso.gazebo.xacro" />
+
     <xacro:include filename="$(find gopher_description)/kortex_description/arms/urdf/kortex_robot.xacro" />
     <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/main_camera_support.urdf.xacro" />
     <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/arm_camera.urdf.xacro" />
@@ -29,21 +32,24 @@
     <xacro:load_base prefix="$(arg prefix)"/>
 
     <!-- Load torso -->
-    <xacro:load_torso prefix="$(arg prefix)"/> 
+    <xacro:load_torso_urdf prefix="$(arg prefix)" parent="$(arg prefix)chassis_link"/> 
+    <xacro:load_torso_gazebo prefix="$(arg prefix)"/> 
 
-    <!-- Load main camera -->
+    <!-- Load main camera 
     <xacro:load_main_camera prefix="$(arg prefix)main_cam_" camera_name="main_cam" 
                             main_camera_base="$(arg prefix)torso"
                             width="1080" height="720" update_rate="30" wide_flag="true"/>
+    -->
 
     <!-- Load two arms -->
     <xacro:if value="$(arg with_arms)">
         <!-- Load the right arm -->
         <xacro:load_kortex arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
-                          vision="$(arg vision)" sim="$(arg sim)" 
-                          prefix="$(arg right_prefix)" parent="$(arg prefix)right_shoulder_link">
-            <origin xyz="0 0 0" rpy="0 0 0" />
-        </xacro:load_kortex> 
+                           vision="$(arg vision)" sim="$(arg sim)" 
+                           prefix="$(arg right_prefix)" parent="$(arg prefix)torso">
+            <origin xyz="-0.03 -0.03 0.7" rpy="1.5708 0 0" />
+        </xacro:load_kortex>
+        
         <!-- Load arm camera -->
         <xacro:load_arm_camera prefix="$(arg right_prefix)cam_" camera_name="right_arm_cam" 
                                arm_camera_base="$(arg right_prefix)camera_link"
@@ -51,9 +57,9 @@
 
         <!-- Load the left arm -->
         <xacro:load_kortex arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
-                          vision="$(arg vision)" sim="$(arg sim)" 
-                          prefix="$(arg left_prefix)" parent="$(arg prefix)left_shoulder_link"> 
-            <origin xyz="0 0 0" rpy="0 0 0" />
+                           vision="$(arg vision)" sim="$(arg sim)" 
+                           prefix="$(arg left_prefix)" parent="$(arg prefix)torso">
+            <origin xyz="-0.03 0.03 0.7" rpy="1.5708 0 3.1416" />
         </xacro:load_kortex> 
 
         <!-- Load arm camera -->
