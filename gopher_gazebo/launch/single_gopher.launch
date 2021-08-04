@@ -142,21 +142,6 @@
     <node name="main_camera_interface" pkg="gopher_control" type="main_camera_control_interface"
           respawn="false" output="screen">
     </node>
-
-    <!-- Start MoveIt main executable -->
-    <include file="$(find gopher_moveit_config)/launch/move_group.launch"
-        if="$(eval arg('with_arms'))">
-        <arg name="publish_monitored_planning_scene" value="true" />
-        <arg name="prefix" value="$(arg prefix)"/>
-        <arg name="right_prefix" value="$(arg right_prefix)" />
-        <arg name="left_prefix" value="$(arg left_prefix)"/>
-    </include> 
-
-    <!-- Start MoveIt interface and home the robot -->
-    <node name="move_group_interface" pkg="gopher_control" type="move_group_interface.py" 
-          output="screen" respawn="false"
-          if="$(eval arg('with_arms'))">
-    </node>
     
     <!-- TODO Driver is not yet implemented-->
     <!-- Parameters for physical robot -->
