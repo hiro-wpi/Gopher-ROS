@@ -39,18 +39,23 @@
     <!-- Load two arms -->
     <xacro:if value="$(arg with_arms)">
         <!-- Load the right arm -->
-        <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
+        <xacro:load_kortex arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
                           vision="$(arg vision)" sim="$(arg sim)" 
-                          prefix="$(arg right_prefix)" parent="$(arg prefix)right_shoulder_link"/> 
+                          prefix="$(arg right_prefix)" parent="$(arg prefix)right_shoulder_link">
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </xacro:load_kortex> 
         <!-- Load arm camera -->
         <xacro:load_arm_camera prefix="$(arg right_prefix)cam_" camera_name="right_arm_cam" 
                                arm_camera_base="$(arg right_prefix)camera_link"
                                width="1080" height="720" update_rate="30" wide_flag="true"/> 
 
         <!-- Load the left arm -->
-        <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
+        <xacro:load_kortex arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" 
                           vision="$(arg vision)" sim="$(arg sim)" 
-                          prefix="$(arg left_prefix)" parent="$(arg prefix)left_shoulder_link"/> 
+                          prefix="$(arg left_prefix)" parent="$(arg prefix)left_shoulder_link"> 
+            <origin xyz="0 0 0" rpy="0 0 0" />
+        </xacro:load_kortex> 
+
         <!-- Load arm camera -->
         <xacro:load_arm_camera prefix="$(arg left_prefix)cam_" camera_name="left_arm_cam" 
                                arm_camera_base="$(arg left_prefix)camera_link"
