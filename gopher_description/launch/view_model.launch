@@ -1,7 +1,10 @@
 <launch>
+
+  <arg name="robot" default="gopher" />
+
   <param name="robot_description" 
          command="$(find xacro)/xacro
-                  $(find gopher_description)/robots/urdf/gopher.xacro" />
+                  $(find gopher_description)/robots/urdf/$(arg robot).xacro" />
 
   <node name="robot_state_publisher" 
         pkg="robot_state_publisher" type="robot_state_publisher" />

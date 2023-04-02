@@ -1,7 +1,0 @@
-<launch>
-
-  <node pkg="gopher_control" type="keyboard_and_mouse.py" name="teleop_keyboard" output="screen"> 
-    <remap from="cmd_vel" to="/gopher_1/base_controller/cmd_vel"/>
-  </node>
-
-</launch>

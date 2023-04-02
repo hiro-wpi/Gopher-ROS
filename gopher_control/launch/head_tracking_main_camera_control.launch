@@ -1,7 +1,0 @@
-<launch>
-
-    <!-- Head-tracking node -->
-    <node name="head_tracking_teleop" pkg="gopher_control" type="head_tracking_interface.py" >
-    </node>
-
-</launch>
