@@ -1,0 +1,16 @@
+<!-- diplays the configuration of the robot with either DWA or TEB local planner -->
+
+ <launch>
+	
+
+    <!-- local planner default -->
+    <arg name="local_planner" default="dwa"/>
+
+    <!-- <param name="robot_description"    
+         command="$(find xacro)/xacro
+                  $(find gopher_description)/urdf/gopher.xacro" /> -->
+    
+    <node if="$(eval arg('local_planner') ==  'teb')" name="rviz" pkg="rviz" type="rviz" args="-d $(find gopher_navigation)/rviz/teb_rviz_config.rviz"/> 
+	<node if="$(eval arg('local_planner') ==  'dwa')" name="rviz" pkg="rviz" type="rviz" args="-d $(find gopher_navigation)/rviz/dwa_rviz_config.rviz"/>
+    
+ </launch>
