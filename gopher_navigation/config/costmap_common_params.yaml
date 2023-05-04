@@ -1,11 +1,20 @@
 map_type: costmap
 
+# Laser Sensor Info
 obstacle_range: 4.0
 raytrace_range: 4.0
-robot_radius: 0.0
-footprint: [ [-0.2, -0.2], [-0.2, 0.2], [0.4, 0.2], [0.4, -0.2] ] 
-inflation_radius: 0.25
-
 observation_sources: laser_scan_sensor
-
 laser_scan_sensor: {sensor_frame: $(arg laser_frame), data_type: LaserScan, topic: $(arg scan), marking: true, clearing: true}
+
+
+# Robot Footprint
+# robot_radius: 0.42
+footprint:  [[-0.2,-0.3],[-0.2,0.3],[1.5,0.3],[1.5,-0.3]]
+
+# Local Cost Map Information
+#     affects the area were the robot will try to avoid, will enter if needed
+inflation_radius: 2.5
+
+
+
+

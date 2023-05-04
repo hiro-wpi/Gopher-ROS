@@ -17,7 +17,10 @@
     <arg name="odom_frame" default="$(arg prefix)odom"/>
     <arg name="base_frame" default="$(arg prefix)chassis_link"/>
     <arg name="laser_frame" default="$(arg prefix)laser_link"/>
+
+    <!-- map for the map server -->
     <arg name="map_name" default="hospital_floorplan_objects"/>
+    <!-- <arg name="map_name" default="hospital_floorplan_test"/> -->
 
     <!-- local planner default -->
     <arg name="local_planner" default="dwa"/>

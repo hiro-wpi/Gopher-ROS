@@ -1,0 +1,8 @@
+image: hospital_floorplan_test.png    # file path to the image
+# resolution: 0.0259740                 # resolution in meters / pixel ->  10 meters per 385 pixels
+resolution: 0.030
+origin: [-15.75 , -15.629, 0.0] 
+occupied_thresh: 0.65
+free_thresh: 0.196
+negate: 0
+#mode: Trinary
