@@ -10,6 +10,9 @@ project(gopher_navigation)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  actionlib_msgs
+  actionlib
+  move_base_msgs
 )
 
 ## System dependencies are found with CMake's conventions
