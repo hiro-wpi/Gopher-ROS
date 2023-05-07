@@ -43,10 +43,11 @@ def send_goal(req):
     return EmptyResponse()
 
 if __name__ == "__main__":
-    rospy.loginfo("Start Node")
+    
     try:
         rospy.init_node("move_base_send_goal_node")
-        s = rospy.Service("move_base_send_goal", Empty, send_goal)
+        rospy.loginfo("Initcialized: move_base_send_goal_node")
+        s = rospy.Service("move_base/send_goal", Empty, send_goal)
         # result = movebase_client()
         # if result:
         #     rospy.loginfo("Goal Execution Done")

@@ -18,10 +18,10 @@ def cancel_goal(req):
     return EmptyResponse()
     
 if __name__ == "__main__":
-    rospy.loginfo("Start Node")
     try:
         rospy.init_node("move_base_cancel_goal_node")
-        s = rospy.Service("move_base_cancel_goal", Empty, cancel_goal)
+        rospy.loginfo("Initcialized: move_base_cancel_goal_node")
+        s = rospy.Service("move_base/cancel_goal", Empty, cancel_goal)
         rospy.spin()
     except rospy.ROSInterruptException:
         rospy.loginfo("Navigation test finished.")
