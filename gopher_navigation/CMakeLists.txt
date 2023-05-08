@@ -13,6 +13,11 @@ find_package(catkin REQUIRED COMPONENTS
   actionlib_msgs
   actionlib
   move_base_msgs
+
+  std_msgs
+  geometry_msgs
+  trajectory_msgs
+  message_generation
 )
 
 ## System dependencies are found with CMake's conventions
@@ -55,12 +60,11 @@ find_package(catkin REQUIRED COMPONENTS
 #   Message2.msg
 # )
 
-## Generate services in the 'srv' folder
-# add_service_files(
-#   FILES
-#   Service1.srv
-#   Service2.srv
-# )
+# Generate services in the 'srv' folder
+add_service_files(
+  FILES
+  # PoseStamped.srv
+)
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -70,10 +74,14 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs  # Or other packages containing msgs
-# )
+generate_messages(
+  DEPENDENCIES  
+  std_msgs
+  geometry_msgs
+  trajectory_msgs
+  # Or other packages containing msgs
+  
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -107,7 +115,8 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES gopher_navigation
-#  CATKIN_DEPENDS roscpp rospy
+  CATKIN_DEPENDS roscpp rospy message_runtime 
+  # geometry_msgs trajectory_msgs
 #  DEPENDS system_lib
 )
 

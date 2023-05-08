@@ -8,8 +8,8 @@ laser_scan_sensor: {sensor_frame: $(arg laser_frame), data_type: LaserScan, topi
 
 
 # Robot Footprint
-# robot_radius: 0.42
-footprint:  [[-0.2,-0.3],[-0.2,0.3],[1.5,0.3],[1.5,-0.3]]
+robot_radius: 0.42
+# footprint:  [[-0.2,-0.3],[-0.2,0.3],[0.3,0.3],[0.3,-0.3]]
 
 # Local Cost Map Information
 #     affects the area were the robot will try to avoid, will enter if needed

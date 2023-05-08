@@ -8,8 +8,8 @@ from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from std_srvs.srv import Empty, EmptyResponse
 from nav_msgs.srv import GetPlan, GetPlanRequest, GetPlanResponse
 
-
-    
+# TODO Change the srv msg for GetPlan to custom srv
+#   We just need to send in the goal, not the start location or the tolerance
 
 def movebase_client(goalRequested):
     client = actionlib.SimpleActionClient('move_base', MoveBaseAction)
