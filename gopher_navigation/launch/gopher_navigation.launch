@@ -72,4 +72,8 @@
     <!-- Custom Nodes to Interface with Move Base -->
     <node name="move_base_cancel_goal" pkg="gopher_navigation"  type="cancel_goal_node.py" respawn="true" output="screen"/>
     <node name="move_base_send_goal" pkg="gopher_navigation"  type="send_goal_node.py" respawn="true" output="screen"/>
+
+    <!-- Dynamic Footprint Interface -->
+    <node name="dynamic_footprint" pkg="gopher_navigation"  type="dynamic_footprint_node.py" respawn="true" output="screen"/>
+    
 </launch>
