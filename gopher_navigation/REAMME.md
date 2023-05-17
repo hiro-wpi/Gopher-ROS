@@ -14,6 +14,12 @@ This includes:
 - provides the option for using either:
     - DWA local planner (default)
     - TEB local planner
+- modifications to the navigation stack for easier interfacing
+    - advertised services
+        - setting goal
+        - canceling goal
+    - subscriptions
+        - footprint
 
 ## Running the navigation stack with Unity Simulation
     
@@ -48,3 +54,26 @@ The map should be now loaded and seen in rviz (map is white, gray and black). Ad
 ```
 rosrun rqt_reconfigure rqt_reconfigure 
 ```
+
+## Modifications to the Navigation Stack
+
+There are two goals when we were modifying the navigation stack:
+
+- Making it easier use with Unity by converting all **actionlib servers** to **ros services** 
+- Making the navigation more useful for the type of actions we intend the robot to perform
+
+Lets go into the details:
+
+### move_base_cancel_goal_node(std_srv/Empty)
+
+Provides a non-action interface for canceling the goal
+
+### move_base_send_goal_node(nav_msgs/GetPlan)
+
+Provides a non-action interface for sending the goal. 
+
+Note: Publishing to the move_base/goal topic was not recommended if we are using the action services of move_base.
+
+### move_base_dynamic_footprint_node(Geometry_msgs/Polygon)
+
+Subscriber that updates the footprint of the robot. This uses dynamic reconfigure. 
