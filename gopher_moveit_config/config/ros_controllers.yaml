@@ -1,0 +1,92 @@
+left_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - gopher/left_arm_joint_1
+    - gopher/left_arm_joint_2
+    - gopher/left_arm_joint_3
+    - gopher/left_arm_joint_4
+    - gopher/left_arm_joint_5
+    - gopher/left_arm_joint_6
+    - gopher/left_arm_joint_7
+  gains:
+    gopher/left_arm_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/left_arm_joint_7:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+right_arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+    - gopher/right_arm_joint_1
+    - gopher/right_arm_joint_2
+    - gopher/right_arm_joint_3
+    - gopher/right_arm_joint_4
+    - gopher/right_arm_joint_5
+    - gopher/right_arm_joint_6
+    - gopher/right_arm_joint_7
+  gains:
+    gopher/right_arm_joint_1:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_2:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_3:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_4:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_5:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_6:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1
+    gopher/right_arm_joint_7:
+      p: 100
+      d: 1
+      i: 1
+      i_clamp: 1

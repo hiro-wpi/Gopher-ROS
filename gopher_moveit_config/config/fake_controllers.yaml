@@ -1,0 +1,38 @@
+controller_list:
+  - name: fake_left_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - gopher/left_arm_joint_1
+      - gopher/left_arm_joint_2
+      - gopher/left_arm_joint_3
+      - gopher/left_arm_joint_4
+      - gopher/left_arm_joint_5
+      - gopher/left_arm_joint_6
+      - gopher/left_arm_joint_7
+  - name: fake_right_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - gopher/right_arm_joint_1
+      - gopher/right_arm_joint_2
+      - gopher/right_arm_joint_3
+      - gopher/right_arm_joint_4
+      - gopher/right_arm_joint_5
+      - gopher/right_arm_joint_6
+      - gopher/right_arm_joint_7
+  - name: fake_left_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - gopher/left_arm_finger_joint
+  - name: fake_right_gripper_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - gopher/right_arm_finger_joint
+initial:  # Define initial robot poses per group
+  - group: left_arm
+    pose: home
+  - group: right_arm
+    pose: home
+  - group: left_gripper
+    pose: open
+  - group: right_gripper
+    pose: open

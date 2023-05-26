@@ -1,0 +1,7 @@
+<launch>
+    <!-- MoveIt -->
+    <include file="$(find gopher_moveit_config)/launch/demo.launch" />
+
+    <!-- Plan trajectory service node -->
+    <node name="plan_trajectory" pkg="gopher_moveit" type="plan_trajectory.py" args="--wait" output="screen"/>
+</launch>
