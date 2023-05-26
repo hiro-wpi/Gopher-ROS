@@ -1,20 +1,33 @@
+# https://github.com/ros-planning/navigation/tree/noetic-devel/costmap_2d/cfg
 map_type: costmap
+transform_tolerance: 0.2
 
-# Laser Sensor Info
-obstacle_range: 4.0
-raytrace_range: 4.0
-observation_sources: laser_scan_sensor
+# Sensor Info
+# laser
+observation_sources: laser_scan_sensor # point_cloud_sensor
 laser_scan_sensor: {sensor_frame: $(arg laser_frame), data_type: LaserScan, topic: $(arg scan), marking: true, clearing: true}
 
 
 # Robot Footprint
-# robot_radius: 0.42
-footprint:  [[-0.2,-0.3],[-0.2,0.3],[0.3,0.3],[0.3,-0.3]]
-
-# Local Cost Map Information
-#     affects the area were the robot will try to avoid, will enter if needed
-inflation_radius: 2.5
+robot_radius: 0.44
+# footprint:  [[-0.2,-0.3],[-0.2,0.3],[0.3,0.3],[0.3,-0.3]]
+footprint_padding: 0.01
 
 
+# Inflation layer
+inflation_layer:
+  # max. distance from an obstacle at which 
+  # costs are incurred for planning paths.
+  inflation_radius: 1.5  # default: 0.55
+  # exponential rate at which the obstacle cost drops off
+  cost_scaling_factor: 3.0  # default: 10
 
-
+# Obstacle layer
+obstacle_layer:
+  obstacle_range: 4.0  # default: 2.5
+  raytrace_range: 3.0
+  max_obstacle_height: 2.4  # default: 2
+  
+# Voxel layer
+# voxel_layer:
+#   z_resolution: 0.2

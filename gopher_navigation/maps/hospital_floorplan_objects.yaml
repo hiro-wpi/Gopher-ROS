@@ -1,5 +1,5 @@
 image: hospital_floorplan_objects.png    # file path to the image
-resolution: 0.04608                        # 868/4 per 40/4 meters
+resolution: 0.04608                      # 868/4 per 40/4 meters
 origin: [-15.25 ,-16.0, 0.0] 
 occupied_thresh: 0.65
 free_thresh: 0.25

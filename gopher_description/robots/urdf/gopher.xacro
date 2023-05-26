@@ -20,12 +20,10 @@
 
     <!-- Include files -->
     <xacro:include filename="$(find gopher_description)/fetch_description/urdf/freight.urdf.xacro" />
-    <!-- <xacro:include filename="$(find gopher_description)/torso_description/urdf/torso.urdf.xacro" /> -->
+    <xacro:include filename="$(find gopher_description)/stand_chest_description/urdf/stand_chest.urdf.xacro" />
     <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/_d435.urdf.xacro" />
     <xacro:include filename="$(find gopher_description)/kortex_description/arms/urdf/kortex_robot.xacro" />
-
-    <xacro:include filename="$(find gopher_description)/stand_chest_description/urdf/stand_chest.urdf.xacro" />
-
+    
     <!-- Load urdf -->
     <!-- base -->
     <xacro:load_freight_urdf prefix="$(arg prefix)" />
@@ -55,12 +53,10 @@
     <!-- Load gazebo control pulgin -->
     <xacro:if value="$(arg sim)">
         <xacro:include filename="$(find gopher_description)/fetch_description/urdf/freight.gazebo.xacro" />
-        <xacro:include filename="$(find gopher_description)/torso_description/urdf/torso.gazebo.xacro" />
         <xacro:include filename="$(find gopher_description)/realsense2_description/urdf/_d435.gazebo.xacro" />
         <xacro:include filename="$(find gopher_description)/stand_chest_description/urdf/stand_chest.gazebo.xacro" />
 
         <xacro:load_freight_gazebo prefix="$(arg prefix)" />
-        <!-- <xacro:load_torso_gazebo prefix="$(arg prefix)" /> -->
         <xacro:load_stand_chest_gazebo prefix="$(arg prefix)" />
         <xacro:gazebo_d435 camera_name="main_cam" reference_link="$(arg prefix)main_cam_link" 
                            frame_name="main_cam_color_optical_frame"
@@ -84,10 +80,7 @@
                             fov="69.4" width="1080" height="720" update_rate="30" /> 
             <xacro:gazebo_d435 camera_name="right_arm_cam" reference_link="$(arg right_prefix)cam_link" 
                             frame_name="right_arm_camera_color_frame"
-                            fov="69.4" width="1080" height="720" update_rate="30" />                                       
-            <!-- Wide FOV camera setting
-            fov="114" width="1.5555*1080" height="720" update_rate="30"
-            -->
+                            fov="69.4" width="1080" height="720" update_rate="30" />
         </xacro:if>
         
         <gazebo>
