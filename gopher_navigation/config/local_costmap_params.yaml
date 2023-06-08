@@ -3,13 +3,11 @@ local_costmap:
   robot_base_frame: $(arg base_frame)
   update_frequency: 5.0
   static_map: false
-  
-  resolution: 0.01  # default: 0.05
-  width: 5.0  # default: 10
-  height: 5.0  # default: 10
-  
   rolling_window: true
   
+  resolution: 0.01  # default: 0.05
+  width: 7.5  # default: 10
+  height: 7.5  # default: 10
+
   # for visualization
   publish_frequency: 2.0
-  

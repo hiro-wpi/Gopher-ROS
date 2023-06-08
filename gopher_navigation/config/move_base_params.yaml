@@ -1,9 +1,42 @@
-controller_frequency: 5.0
+# Oscillation
+oscillation_timeout: 10.0  # default: 0 (no oscillation allowed)
+oscillation_distance: 0.5
 
-# shutdown_costmaps: false
-# planner_patience: 5.0
-# controller_patience: 15.0
-# conservative_reset_dist: 3.0
-# planner_frequency: 5.0
-# oscillation_timeout: 10.0
-# oscillation_distance: 0.2
+
+# Global planner
+planner_frequency: 0.2  # default: 0 (no replanning)
+planner_patience: 5.0
+
+# global planner: navfn/NavfnROS, global_planner/GlobalPlanner, carrot_planner/CarrotPlanner
+base_global_planner: "global_planner/GlobalPlanner"
+GlobalPlanner:
+  use_dijkstra: true  # default: true (Dijkstra performs better than this A*)
+  cost_factor: 0.3  # default: 3
+  neutral_cost: 60  # default: 50
+
+
+# Local planner
+controller_frequency: 5.0  # default: 20
+controller_patience: 3.0  # default: 5
+
+# Comment out here. This would be defined in their own local_planner_params.yaml
+# local planner: base_local_planner/TrajectoryPlannerROS, dwa_local_planner/DWAPlannerROS, teb_local_planner/TebLocalPlannerROS
+# base_local_planner: "base_local_planner/TrajectoryPlannerROS"
+
+
+# Recovery behaviors
+recovery_behavior_enabled: true
+recovery_behaviors:
+  - name: "conservative_reset"
+    type: "clear_costmap_recovery/ClearCostmapRecovery"
+  - name: "rotate_recovery"
+    type: "rotate_recovery/RotateRecovery"
+  - name: "aggressive_reset"
+    type: "clear_costmap_recovery/ClearCostmapRecovery"
+conservative_reset:
+  reset_distance: 3.0
+rotate_recovery:
+  frequency: 20.0
+  sim_granularity: 0.017
+aggressive_reset: 
+  reset_distance: 0.5
