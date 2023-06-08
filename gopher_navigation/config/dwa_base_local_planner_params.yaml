@@ -13,8 +13,10 @@ DWAPlannerROS:
   max_vel_theta: 1.0
   min_vel_theta: 0.4  # default: 0.6
 
-  # Issue in DWAPlannerROS weighting (fixed in ROS2 DWB)
-  # Need to be larger than actual value to reach max vel
+  # Issue in DWAPlannerROS weighting
+  # The planner only consider the goal in the local costmap (fixed in ROS2 DWB)
+  # https://answers.ros.org/question/12066/move_basebase_local_planner-maximum-velocity/
+  # Acc need to be larger than actual value to reach max vel
   acc_lim_trans: 5.0
   acc_lim_x: 5.0
   acc_lim_y: 0.0  # y is not used
