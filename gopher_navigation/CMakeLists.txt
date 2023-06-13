@@ -64,6 +64,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   # PoseStamped.srv
+  TFListenerService.srv
 )
 
 ## Generate actions in the 'action' folder
