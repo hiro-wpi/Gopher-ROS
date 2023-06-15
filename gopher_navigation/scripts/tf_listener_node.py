@@ -14,23 +14,23 @@ class TFListener():
 
     # Constructor
     def __init__(self):
-        # Debug Message for Clarification
-        rospy.loginfo("Started: tf_listener_node << Waiting for Parent and Child Frames Before Publishing")
 
-        # For initcialization
-        self.parentFrame = "/map"
-        self.childFrame = "/gopher/chassis_link"
-        self.isNodeInitcialized = False
+        rospy.loginfo("Initicailized: tf_listener_node")
 
-    
-        self.service = rospy.Service("tf_listener/set_parent_and_child", TFListenerService, self.initcializeParentAndChild)
+        # Service
+        self.service = rospy.Service("tf_listener/set_parent_and_child", TFListenerService, self.setParentAndChild)
+        
+        # Publisher
         self.publisher = rospy.Publisher("tf_listener/transform", TransformStamped, queue_size=10)
 
+        # Transform Listener and Dependant Variables
         self.listener = tf.TransformListener()
+        self.parentFrame = "/map"
+        self.childFrame = "/gopher/chassis_link"
 
         self.update()
 
-    # The update loop that handles publishing the transform when ready
+    # Update Loop
     def update(self):
 
         rate = rospy.Rate(10.0)
@@ -54,44 +54,6 @@ class TFListener():
                 # rospy.logerr(e)
                 continue
 
-    # Checks to make sure the transformation is valid, by using the result of tf.Listener.lookupTransform
-    def isValidTransform(self, parent_frame, child_frame):
-
-        try:
-            (position, rotation) =  self.listener.lookupTransform(parent_frame, child_frame, rospy.Time())
-            rospy.loginfo("tf_listener_node << Valid transformation requested")
-        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
-            rospy.logwarn("tf_listener_node << Invalid transformation requested")
-            return False
-        
-        return True
-
-
-    # initcialized the string of the parent and child frame to get the correct transformation
-    def initcializeParentAndChild(self, req):
-
-        isValid = self.isValidTransform(req.parent_frame, req.child_frame)
-
-        response = TFListenerServiceResponse()
-        
-        if(isValid):
-
-            if(self.parentFrame == ""):
-                rospy.loginfo("Initicailized: tf_listener_node << Frames recieved, will start publishing.")
-            else:
-                rospy.loginfo("tf_listener_node << New Parent and Child Frame Given")
-
-            self.parentFrame = req.parent_frame
-            self.childFrame = req.child_frame
-            self.isNodeInitcialized = True
-
-            response.isValidTransform = True
-
-        else:
-            response.isValidTransform = False
-
-        return response
-
     # Converts the position, and rotation tuples to the TransformStamped msg
     def toTransfromStamped(self, position, rotation, time):
         msg = TransformStamped()
@@ -112,6 +74,40 @@ class TFListener():
 
         return msg
 
+    # Checks if a transform can be made from the two frames given
+    def isValidTransform(self, parentframe, childframe):
+
+        # if loopupTransform doesnt return an error, then the transform should exist
+        try:
+            (position, rotation) =  self.listener.lookupTransform(parentframe, childframe, rospy.Time())
+            rospy.loginfo("tf_listener_node << Valid transformation requested")
+        except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
+            rospy.logwarn("tf_listener_node << Invalid transformation requested")
+            return False
+        
+        return True
+
+
+    # Changes the parent and child frame if a transform can be made
+    def setParentAndChild(self, req):
+
+        isValid = self.isValidTransform(req.parent_frame, req.child_frame)
+        
+        if(isValid):
+
+            # Changes the used parents
+            self.parentFrame = req.parent_frame
+            self.childFrame = req.child_frame
+            
+            rospy.loginfo("tf_listener_node << Frames Changed Successfully.")
+            return TFListenerServiceResponse(True)
+
+        else:
+            rospy.logwarn("tf_listener_node << Frames change was requested. Frames given did not give a valid transformation.")
+            return TFListenerServiceResponse(False)
+
+        # return response
+
 
 if __name__ == "__main__":
     try:
@@ -119,4 +115,4 @@ if __name__ == "__main__":
         listener = TFListener()
         rospy.spin()
     except rospy.ROSInterruptException:
-        rospy.loginfo("Navigation test finished.")
+        rospy.loginfo("tf_listener_node finished.")
