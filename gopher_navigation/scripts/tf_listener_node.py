@@ -18,8 +18,8 @@ class TFListener():
         rospy.loginfo("Started: tf_listener_node << Waiting for Parent and Child Frames Before Publishing")
 
         # For initcialization
-        self.parentFrame = ""
-        self.childFrame = ""
+        self.parentFrame = "/map"
+        self.childFrame = "/gopher/chassis_link"
         self.isNodeInitcialized = False
 
     
@@ -37,22 +37,22 @@ class TFListener():
 
         while (not rospy.is_shutdown()):
             
-            if(self.isNodeInitcialized):
-                time = rospy.Time()
+            # if(self.isNodeInitcialized):
+            time = rospy.Time()
 
-                try:
-                    (position, rotation) = self.listener.lookupTransform(self.parentFrame, self.childFrame, time)
+            try:
+                (position, rotation) = self.listener.lookupTransform(self.parentFrame, self.childFrame, time)
 
-                    # convert that to a transformStamped
-                    TransformStampedMsg = self.toTransfromStamped(position, rotation, time)
-                
-                    # publish the transformStamped msg
-                    self.publisher.publish(TransformStampedMsg)
+                # convert that to a transformStamped
+                TransformStampedMsg = self.toTransfromStamped(position, rotation, time)
+            
+                # publish the transformStamped msg
+                self.publisher.publish(TransformStampedMsg)
 
-                except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
-                    # it may take a few attempts to connect
-                    rospy.logerr(e)
-                    continue
+            except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException) as e:
+                # it may take a few attempts to connect
+                # rospy.logerr(e)
+                continue
 
     # Checks to make sure the transformation is valid, by using the result of tf.Listener.lookupTransform
     def isValidTransform(self, parent_frame, child_frame):
