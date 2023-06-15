@@ -2,7 +2,7 @@
     Launches:
         Map Server
         AMCL
-        Move Base
+        TF Listener
  -->
 
  <launch>
@@ -12,17 +12,13 @@
     <arg name="prefix" default="$(arg robot_name)/"/>
 
     <arg name="cmd_vel" default="$(arg prefix)cmd_vel"/>
-    <arg name="scan" default="$(arg prefix)base_scan"/>
-    <arg name="odom_frame" default="$(arg prefix)odom"/>
-    <arg name="base_frame" default="$(arg prefix)chassis_link"/>
+    <arg name="scan" default="$(arg prefix)base_scan"/>  <!--Used-->
+    <arg name="odom_frame" default="$(arg prefix)odom"/> <!--Used-->
+    <arg name="base_frame" default="$(arg prefix)chassis_link"/> <!--Used-->
     <arg name="laser_frame" default="$(arg prefix)laser_link"/>
 
     <!-- map for the map server -->
-    <arg name="map_name" default="hospital_floorplan_objects"/>
-
-    <!-- local planner default -->
-    <arg name="local_planner" default="dwa"/>
-
+    <arg name="map_name" default="hospital_floorplan_objects"/> <!--Used-->
 
     <!-- Map loader -->
     <node name="map_server" pkg="map_server" type="map_server" 
@@ -71,4 +67,7 @@
         <param name="odom_alpha3"               value="0.005"/>
         <param name="odom_alpha4"               value="0.005"/>
     </node>
+
+    <node name="tf_listener" pkg="gopher_navigation"  type="tf_listener_node.py" respawn="true" output="screen"/>
+
 </launch>

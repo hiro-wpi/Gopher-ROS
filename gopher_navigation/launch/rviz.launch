@@ -1,7 +1,11 @@
-<!-- diplays the configuration of the robot with either DWA or TEB local planner -->
+<!-- 
+    Launches
+        Rviz
+        Local Planner DWA or TEB
+ -->
 
  <launch>
-	
+	<param name="use_sim_time" value="true"/>
 
     <!-- local planner default -->
     <arg name="local_planner" default="dwa"/>

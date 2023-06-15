@@ -1,0 +1,54 @@
+<!-- 
+    Launches: 
+        Move Base
+        Dynamic Footprint
+-->
+<launch>
+    <param name="use_sim_time" value="true"/>
+
+    <arg name="robot_name" default="gopher"/>
+    <arg name="prefix" default="$(arg robot_name)/"/>
+
+    <arg name="cmd_vel" default="$(arg prefix)cmd_vel"/>
+    <arg name="scan" default="$(arg prefix)base_scan"/>
+    <arg name="odom_frame" default="$(arg prefix)odom"/>
+    <arg name="base_frame" default="$(arg prefix)chassis_link"/>
+    <arg name="laser_frame" default="$(arg prefix)laser_link"/>
+
+    <!-- local planner default -->
+    <arg name="local_planner" default="dwa"/>
+
+    <!-- Move Base -->
+    <node if="$(eval arg('local_planner') == 'dwa')" name="move_base" pkg="move_base" type="move_base" respawn="false" output="screen">
+        <remap from="cmd_vel" to="$(arg cmd_vel)"/>
+        <rosparam file="$(find gopher_navigation)/config/move_base_params.yaml" command="load" />
+
+        <rosparam file="$(find gopher_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/global_costmap_params.yaml" command="load" subst_value="true"/>
+
+        <rosparam  file="$(find gopher_navigation)/config/dwa_base_local_planner_params.yaml" command="load"/>
+    </node>
+
+    <node if="$(eval arg('local_planner') == 'teb')" name="move_base" pkg="move_base" type="move_base" respawn="false" output="screen">
+        <remap from="cmd_vel" to="$(arg cmd_vel)"/>
+        <rosparam file="$(find gopher_navigation)/config/move_base_params.yaml" command="load" />
+
+        <rosparam file="$(find gopher_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/costmap_common_params.yaml" command="load" ns="local_costmap" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/local_costmap_params.yaml" command="load" subst_value="true"/>
+        <rosparam file="$(find gopher_navigation)/config/global_costmap_params.yaml" command="load" subst_value="true"/>
+
+        <rosparam file="$(find gopher_navigation)/config/teb_base_local_planner_params.yaml" command="load"/>
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    </node>
+
+    <!--Custom Move Base Interfaces -->
+    <node name="move_base_cancel_goal" pkg="gopher_navigation"  type="cancel_goal_node.py" respawn="true" output="screen"/>
+    <node name="move_base_send_goal" pkg="gopher_navigation"  type="send_goal_node.py" respawn="true" output="screen"/>
+
+    <!-- Dynamic Footprint Interface -->
+    <node name="move_base_dynamic_footprint" pkg="gopher_navigation"  type="dynamic_footprint_node.py" respawn="true" output="screen"/>
+
+</launch>
