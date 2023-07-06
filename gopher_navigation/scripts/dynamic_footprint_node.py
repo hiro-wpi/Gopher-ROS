@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-
-
 import rospy
 import roslib
 import dynamic_reconfigure.client

@@ -34,9 +34,9 @@ DWAPlannerROS:
   path_distance_bias: 32  # default: 0.6
   # how much the robot should attempt to reach the local goal 
   # suggested 20, causing too much violation of the inflation space
-  goal_distance_bias: 1.0  # default: 0.8
+  goal_distance_bias: 2.0  # default: 0.8
   # how much the robot should attempt to avoid obstacles.
-  occdist_scale: 2.0  # default: 0.01
+  occdist_scale: 0.02  # default: 0.01
 
   # Goal Tolerance Parameters
   yaw_goal_tolerance: 0.2

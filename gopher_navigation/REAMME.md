@@ -21,6 +21,12 @@ This includes:
     - subscriptions
         - footprint
 
+## Additional Installation
+Dynamic Footprint relies on the C++ Boost.Geometry library. Instalation instructions can be found on https://robots.uc3m.es/installation-guides/install-boost.html To install on Ubuntu, run:
+```
+sudo apt install libboost-geometry-utils-perl
+```
+
 ## Running the navigation stack with Unity Simulation
     
 For running the navigation stack in conjunction to the Unity simuation, run the following in seperate terminals
